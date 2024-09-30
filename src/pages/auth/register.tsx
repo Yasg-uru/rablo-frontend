@@ -21,6 +21,10 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
+import { Register } from "@/state-manager/slices/authSlice";
+import { useToast } from "@/hooks/use-toast";
+import Loader from "@/helper/Loader";
 
 const registrationSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
@@ -30,9 +34,12 @@ const registrationSchema = z.object({
     .min(6, { message: "Password must be at least 6 characters" }),
 });
 
-type RegistrationFormSchema = z.infer<typeof registrationSchema>;
+export type RegistrationFormSchema = z.infer<typeof registrationSchema>;
 
 export default function StylishRegistrationForm() {
+  const dispatch = useAppDispatch();
+  const { toast } = useToast();
+  const { isLoading } = useAppSelector((state) => state.auth);
   const form = useForm<RegistrationFormSchema>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
@@ -43,9 +50,22 @@ export default function StylishRegistrationForm() {
   });
 
   const onSubmit = (data: RegistrationFormSchema) => {
-    console.log("Form submitted:", data);
+    dispatch(Register(data))
+      .then(() => {
+        toast({
+          title: "Your account has been created successfully",
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: error,
+        });
+      });
     form.reset(); // Reset form after submission
   };
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
