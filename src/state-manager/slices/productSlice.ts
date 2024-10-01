@@ -46,6 +46,19 @@ export const RatingHigherThanValue = createAsyncThunk(
     }
   }
 );
+export const createProduct = createAsyncThunk(
+  "/product/create",
+  async (formdata: FormData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post("/product/create", formdata, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 export const OnlyFeatured = createAsyncThunk(
   "product/featured",
   async (_, { rejectWithValue }) => {
@@ -104,6 +117,15 @@ const productSlice = createSlice({
     });
     builder.addCase(RatingHigherThanValue.pending, (state) => {
       state.isLoading = true;
+    });
+    builder.addCase(createProduct.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(createProduct.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(createProduct.fulfilled, (state) => {
+      state.isLoading = false;
     });
   },
 });

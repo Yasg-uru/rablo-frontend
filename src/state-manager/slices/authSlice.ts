@@ -41,6 +41,7 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(Register.fulfilled, (state, action) => {
+      state.isLoggedIn=true;
       state.userinfo = action.payload.user;
       state.isLoading = false;
     });
@@ -57,6 +58,7 @@ const authSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(Login.fulfilled, (state, action) => {
+      state.isLoggedIn=true;
       state.userinfo = action.payload.user;
       state.isLoading = false;
     });
