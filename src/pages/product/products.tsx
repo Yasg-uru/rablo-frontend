@@ -172,13 +172,13 @@ export default function ProductsPage() {
         {products.length > 0 &&
           products.map((product) => (
             <div key={product._id} className="border rounded-lg p-4 shadow-sm">
-              <img
+              {/* <img
                 src={product.productImage}
                 alt={product.name}
                 width={300}
                 height={300}
                 className="w-full h-48 object-cover mb-4 rounded"
-              />
+              /> */}
               <h2 className="text-lg font-semibold">{product.name}</h2>
               <p className="text-gray-600">${product.price.toFixed(2)}</p>
               <p className="text-gray-600">{product.productId}</p>

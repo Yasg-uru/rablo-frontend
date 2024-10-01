@@ -29,13 +29,6 @@ const formSchema = z.object({
   featured: z.boolean(),
   rating: z.number().min(0).max(5, "Rating must be between 0 and 5"),
   company: z.string().min(1, "Company name is required"),
-  productImage: z.instanceof(File).refine((file) => {
-    if (file) {
-      const allowedExtensions = ["image/jpeg", "image/png", "image/gif"];
-      return allowedExtensions.includes(file.type);
-    }
-    return true;
-  }, "Only .jpg, .png, and .gif formats are allowed."),
 });
 
 export default function CreateProductPage() {
@@ -63,8 +56,8 @@ export default function CreateProductPage() {
     formData.append("featured", values.featured.toString());
     formData.append("rating", values.rating.toString());
     formData.append("company", values.company);
-    formData.append("file", values.productImage);
-    console.log("this is a product data :",values)
+    // formData.append("file", values.productImage);
+    console.log("this is a product data :", values);
     dispatch(createProduct(formData))
       .unwrap()
       .then(() => {
@@ -81,17 +74,17 @@ export default function CreateProductPage() {
       });
   }
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      form.setValue("productImage", file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  //   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     const file = e.target.files?.[0];
+  //     if (file) {
+  //       form.setValue("productImage", file);
+  //       const reader = new FileReader();
+  //       reader.onloadend = () => {
+  //         setImagePreview(reader.result as string);
+  //       };
+  //       reader.readAsDataURL(file);
+  //     }
+  //   };
   if (isLoading) {
     return <Loader />;
   }
@@ -200,7 +193,7 @@ export default function CreateProductPage() {
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="productImage"
             render={({ field }) => (
@@ -231,7 +224,7 @@ export default function CreateProductPage() {
                 )}
               </FormItem>
             )}
-          />
+          /> */}
           <Button type="submit">Create Product</Button>
         </form>
       </Form>
