@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
 import { Register } from "@/state-manager/slices/authSlice";
 import { useToast } from "@/hooks/use-toast";
 import Loader from "@/helper/Loader";
+import { Link } from "react-router-dom";
 
 const registrationSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
@@ -148,12 +149,12 @@ export default function StylishRegistrationForm() {
         <CardFooter className="flex justify-center">
           <p className="text-sm">
             Already have an account?{" "}
-            <a
-              href="/login"
+            <Link
+              to="/login"
               className="text-black font-semibold hover:underline"
             >
               Login
-            </a>
+            </Link>
           </p>
         </CardFooter>
       </Card>

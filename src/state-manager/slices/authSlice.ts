@@ -2,6 +2,8 @@ import { authState } from "@/types/auth-types/authstate";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "@/helper/axiosinstance";
 import { RegistrationFormSchema } from "@/pages/auth/register";
+import { z } from "zod";
+import { LoginSchema } from "@/pages/auth/login";
 const initialState: authState = {
   isLoading: false,
   isLoggedIn: false,
@@ -9,9 +11,22 @@ const initialState: authState = {
 };
 export const Register = createAsyncThunk(
   "auth/register",
-  async (formData:RegistrationFormSchema, { rejectWithValue }) => {
+  async (formData: RegistrationFormSchema, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post("user/register", formData, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+export const Login = createAsyncThunk(
+  "auth/login",
+  async (formData: z.infer<typeof LoginSchema>, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post("user/login", formData, {
         withCredentials: true,
       });
       return response.data;
@@ -33,6 +48,16 @@ const authSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(Register.rejected, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(Login.rejected, (state, action) => {
+      state.isLoading = false;
+    });
+    builder.addCase(Login.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(Login.fulfilled, (state, action) => {
+      state.userinfo = action.payload.user;
       state.isLoading = false;
     });
   },
