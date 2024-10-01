@@ -42,12 +42,15 @@ export default function ProductsPage() {
       });
   }, []);
   const handleFeatured = () => {
-    setIsFeatured(isFeatured === true ? false : true);
-    if (isFeatured) {
+    const newFeaturedState = !isFeatured;  // Toggle the current state
+    setIsFeatured(newFeaturedState);       // Update the state
+  
+    if (newFeaturedState) {
+      // If the new state is true, fetch only featured products
       dispatch(OnlyFeatured()).unwrap()
         .then(() => {
           toast({
-            title: "fetched only featured products",
+            title: "Fetched only featured products",
           });
         })
         .catch((error) => {
@@ -57,10 +60,11 @@ export default function ProductsPage() {
           });
         });
     } else {
+      // Otherwise, fetch all products
       dispatch(fetchProducts()).unwrap()
         .then(() => {
           toast({
-            title: "Fetched products successfully",
+            title: "Fetched all products successfully",
           });
         })
         .catch((error) => {
@@ -71,6 +75,7 @@ export default function ProductsPage() {
         });
     }
   };
+  
   useEffect(() => {
     dispatch(PriceLessThanValue(maxPrice)).unwrap()
       .then(() => {

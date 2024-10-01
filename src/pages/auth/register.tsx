@@ -40,7 +40,7 @@ export type RegistrationFormSchema = z.infer<typeof registrationSchema>;
 export default function StylishRegistrationForm() {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const { isLoading } = useAppSelector((state) => state.auth);
   const form = useForm<RegistrationFormSchema>({
     resolver: zodResolver(registrationSchema),
@@ -52,12 +52,13 @@ export default function StylishRegistrationForm() {
   });
 
   const onSubmit = (data: RegistrationFormSchema) => {
-    dispatch(Register(data)).unwrap()
+    dispatch(Register(data))
+      .unwrap()
       .then(() => {
         toast({
           title: "Your account has been created successfully",
         });
-        navigate("/")
+        navigate("/");
       })
       .catch((error) => {
         toast({
