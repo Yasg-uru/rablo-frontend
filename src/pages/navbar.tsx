@@ -8,14 +8,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import {  User, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
 import { Logout } from "@/state-manager/slices/authSlice";
 import { toast } from "@/hooks/use-toast";
 import Loader from "@/helper/Loader";
-
 export default function Navbar() {
   const { isLoggedIn, isLoading, userinfo } = useAppSelector(
     (state) => state.auth
