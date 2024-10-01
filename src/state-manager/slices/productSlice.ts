@@ -52,6 +52,7 @@ export const createProduct = createAsyncThunk(
   "/product/create",
   async (formdata: FormData, { rejectWithValue }) => {
     try {
+      console.log("this is a formdata :", formdata);
       const response = await axiosInstance.post("/product/create", formdata, {
         withCredentials: true,
       });

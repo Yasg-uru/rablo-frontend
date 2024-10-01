@@ -64,6 +64,7 @@ export default function CreateProductPage() {
     formData.append("rating", values.rating.toString());
     formData.append("company", values.company);
     formData.append("file", values.productImage);
+    console.log("this is a product data :",values)
     dispatch(createProduct(formData))
       .unwrap()
       .then(() => {
