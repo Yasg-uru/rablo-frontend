@@ -4,6 +4,7 @@ import axiosInstance from "@/helper/axiosinstance";
 import { RegistrationFormSchema } from "@/pages/auth/register";
 import { z } from "zod";
 import { LoginSchema } from "@/pages/auth/login";
+
 const initialState: authState = {
   isLoading: false,
   isLoggedIn: false,
@@ -31,7 +32,7 @@ export const Login = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
-      console.log("this is a error while user is login",error)
+      console.log("this is a error while user is login", error);
       return rejectWithValue(error.response.data.message);
     }
   }

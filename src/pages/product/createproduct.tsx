@@ -29,17 +29,13 @@ const formSchema = z.object({
   featured: z.boolean(),
   rating: z.number().min(0).max(5, "Rating must be between 0 and 5"),
   company: z.string().min(1, "Company name is required"),
-  productImage: z
-    .instanceof(File)
-    .refine((file) => file.size <= 5000000, `Max image size is 5MB.`)
-    .refine(
-      (file) =>
-        ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
-          file.type
-        ),
-      "Only .jpg, .jpeg, .png and .webp formats are supported."
-    )
-    
+  productImage: z.instanceof(File).refine((file) => {
+    if (file) {
+      const allowedExtensions = ["image/jpeg", "image/png", "image/gif"];
+      return allowedExtensions.includes(file.type);
+    }
+    return true;
+  }, "Only .jpg, .png, and .gif formats are allowed."),
 });
 
 export default function CreateProductPage() {
@@ -68,7 +64,8 @@ export default function CreateProductPage() {
     formData.append("rating", values.rating.toString());
     formData.append("company", values.company);
     formData.append("file", values.productImage);
-    dispatch(createProduct(formData)).unwrap()
+    dispatch(createProduct(formData))
+      .unwrap()
       .then(() => {
         toast({
           title: "Product Created",
