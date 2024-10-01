@@ -13,20 +13,33 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { ShoppingCart, User, LogOut, Settings } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector } from "@/state-manager/hook";
-
-// This would typically come from your authentication context
-const useAuth = () => {
-  const [isLoggedIn, setisLoggedIn] = useState(false);
-  const login = () => setisLoggedIn(true);
-  const logout = () => setisLoggedIn(false);
-  return { isLoggedIn, login, logout };
-};
+import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
+import { Logout } from "@/state-manager/slices/authSlice";
+import { toast } from "@/hooks/use-toast";
+import Loader from "@/helper/Loader";
 
 export default function Navbar() {
-  const { isLoggedIn } = useAppSelector((state) => state.auth);
+  const { isLoggedIn,isLoading } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
+  const handleLogout = () => {
+    dispatch(Logout())
+      .then(() => {
+        toast({
+          title: "Logged out successfull",
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: error,
+          variant: "destructive",
+        });
+      });
+  };
+if(isLoading){
+    return <Loader/>
+}
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,9 +113,7 @@ export default function Navbar() {
                       <span>Settings</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                    //  onClick={logout}
-                    >
+                    <DropdownMenuItem onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Log out</span>
                     </DropdownMenuItem>

@@ -181,6 +181,7 @@ export default function ProductsPage() {
               />
               <h2 className="text-lg font-semibold">{product.name}</h2>
               <p className="text-gray-600">${product.price.toFixed(2)}</p>
+              <p className="text-gray-600">{product.productId}</p>
               <p className="text-sm text-gray-500">Rating: {product.rating}</p>
               {product.featured && (
                 <span className="inline-block bg-yellow-200 text-yellow-800 text-xs px-2 py-1 rounded-full mt-2">

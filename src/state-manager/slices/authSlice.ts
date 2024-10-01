@@ -35,13 +35,30 @@ export const Login = createAsyncThunk(
     }
   }
 );
+export const Logout = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post(
+        "/user/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {},
   extraReducers(builder) {
     builder.addCase(Register.fulfilled, (state, action) => {
-      state.isLoggedIn=true;
+      state.isLoggedIn = true;
       state.userinfo = action.payload.user;
       state.isLoading = false;
     });
@@ -58,8 +75,19 @@ const authSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(Login.fulfilled, (state, action) => {
-      state.isLoggedIn=true;
+      state.isLoggedIn = true;
       state.userinfo = action.payload.user;
+      state.isLoading = false;
+    });
+    builder.addCase(Logout.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(Logout.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(Logout.fulfilled, (state) => {
+      state.isLoggedIn = false;
+
       state.isLoading = false;
     });
   },
