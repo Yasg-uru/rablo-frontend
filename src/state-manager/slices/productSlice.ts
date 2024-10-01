@@ -51,10 +51,10 @@ export const RatingHigherThanValue = createAsyncThunk(
 );
 export const createProduct = createAsyncThunk(
   "/product/create",
-  async (formdata: productType, { rejectWithValue }) => {
+  async (data: productType, { rejectWithValue }) => {
     try {
-      console.log("this is a formdata :", formdata);
-      const response = await axiosInstance.post("/product/create", formdata, {
+      console.log("this is a formdata :", data);
+      const response = await axiosInstance.post("/product/create", data, {
         withCredentials: true,
       });
       return response.data;
