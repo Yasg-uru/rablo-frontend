@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,19 +9,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { User, LogOut, Menu } from "lucide-react"
-import { Link, useNavigate } from "react-router-dom"
-import { useAppDispatch, useAppSelector } from "@/state-manager/hook"
-import { Logout } from "@/state-manager/slices/authSlice"
-import { toast } from "@/hooks/use-toast"
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User, LogOut, Menu } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
+import { Logout } from "@/state-manager/slices/authSlice";
+import { toast } from "@/hooks/use-toast";
 
 export default function Navbar() {
-  const { isLoggedIn, userinfo } = useAppSelector((state) => state.auth)
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { isLoggedIn, userinfo } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch(Logout())
@@ -29,19 +29,19 @@ export default function Navbar() {
       .then(() => {
         toast({
           title: "Logged out successfully",
-        })
+        });
       })
       .catch((error) => {
         toast({
           title: error,
           variant: "destructive",
-        })
-      })
-  }
+        });
+      });
+  };
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <nav className="bg-white shadow-md">
@@ -156,8 +156,8 @@ export default function Navbar() {
                   variant="ghost"
                   className="w-full justify-start"
                   onClick={() => {
-                    navigate("/create")
-                    toggleMenu()
+                    navigate("/create");
+                    toggleMenu();
                   }}
                 >
                   <User className="mr-2 h-4 w-4" />
@@ -167,8 +167,8 @@ export default function Navbar() {
                   variant="ghost"
                   className="w-full justify-start"
                   onClick={() => {
-                    handleLogout()
-                    toggleMenu()
+                    handleLogout();
+                    toggleMenu();
                   }}
                 >
                   <LogOut className="mr-2 h-4 w-4" />
@@ -181,8 +181,8 @@ export default function Navbar() {
                   variant="outline"
                   className="w-full"
                   onClick={() => {
-                    navigate("/login")
-                    toggleMenu()
+                    navigate("/login");
+                    toggleMenu();
                   }}
                 >
                   Log in
@@ -190,8 +190,8 @@ export default function Navbar() {
                 <Button
                   className="w-full"
                   onClick={() => {
-                    navigate("/register")
-                    toggleMenu()
+                    navigate("/register");
+                    toggleMenu();
                   }}
                 >
                   Sign up
@@ -202,5 +202,5 @@ export default function Navbar() {
         </div>
       )}
     </nav>
-  )
+  );
 }

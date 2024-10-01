@@ -1,4 +1,5 @@
 import axiosInstance from "@/helper/axiosinstance";
+import { productType } from "@/pages/product/createproduct";
 import { updateproductSchema } from "@/pages/product/update-product";
 import { productState } from "@/types/product-types/productSlice";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -50,7 +51,7 @@ export const RatingHigherThanValue = createAsyncThunk(
 );
 export const createProduct = createAsyncThunk(
   "/product/create",
-  async (formdata: FormData, { rejectWithValue }) => {
+  async (formdata: productType, { rejectWithValue }) => {
     try {
       console.log("this is a formdata :", formdata);
       const response = await axiosInstance.post("/product/create", formdata, {

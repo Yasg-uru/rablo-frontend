@@ -20,7 +20,7 @@ import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
 import Loader from "@/helper/Loader";
 import { createProduct } from "@/state-manager/slices/productSlice";
 
-const formSchema = z.object({
+const productSchema = z.object({
   productId: z.string().min(1, "Product ID is required"),
   name: z.string().min(1, "Product name is required"),
   price: z.number().min(0, "Price must be a positive number"),
@@ -28,14 +28,15 @@ const formSchema = z.object({
   rating: z.number().min(0).max(5, "Rating must be between 0 and 5"),
   company: z.string().min(1, "Company name is required"),
 });
+ export type productType=z.infer<typeof productSchema>
 
 export default function CreateProductPage() {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((state) => state.product);
   //   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof productSchema>>({
+    resolver: zodResolver(productSchema),
     defaultValues: {
       productId: "",
       name: "",
@@ -46,17 +47,9 @@ export default function CreateProductPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const formData = new FormData();
-    formData.append("productId", values.productId);
-    formData.append("name", values.name);
-    formData.append("price", values.price.toString());
-    formData.append("featured", values.featured.toString());
-    formData.append("rating", values.rating.toString());
-    formData.append("company", values.company);
-    // formData.append("file", values.productImage);
-    console.log("this is a product data :", values);
-    dispatch(createProduct(formData))
+  function onSubmit(values: z.infer<typeof productSchema>) {
+    
+    dispatch(createProduct(values))
       .unwrap()
       .then(() => {
         toast({
