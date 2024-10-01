@@ -68,7 +68,7 @@ export default function CreateProductPage() {
     formData.append("rating", values.rating.toString());
     formData.append("company", values.company);
     formData.append("file", values.productImage);
-    dispatch(createProduct(formData))
+    dispatch(createProduct(formData)).unwrap()
       .then(() => {
         toast({
           title: "Product Created",

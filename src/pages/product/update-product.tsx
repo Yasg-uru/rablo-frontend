@@ -57,7 +57,7 @@ export function UpdateProductDialog({ product }: UpdateProductDialogProps) {
   });
 
   function onSubmit(values: z.infer<typeof updateproductSchema>) {
-    dispatch(updateProduct({ productId: product._id, data: values }))
+    dispatch(updateProduct({ productId: product._id, data: values })).unwrap()
       .then(() => {
         toast({ title: "Product updated successfully" });
         setOpen(false);

@@ -51,7 +51,7 @@ export default function StylishRegistrationForm() {
   });
 
   const onSubmit = (data: RegistrationFormSchema) => {
-    dispatch(Register(data))
+    dispatch(Register(data)).unwrap()
       .then(() => {
         toast({
           title: "Your account has been created successfully",

@@ -22,7 +22,7 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
-    dispatch(Logout())
+    dispatch(Logout()).unwrap()
       .then(() => {
         toast({
           title: "Logged out successfull",

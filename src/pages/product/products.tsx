@@ -28,7 +28,7 @@ export default function ProductsPage() {
   const [minRating, setMinRating] = useState<number>(0);
 
   useEffect(() => {
-    dispatch(fetchProducts())
+    dispatch(fetchProducts()).unwrap()
       .then(() => {
         toast({
           title: "Fetched products successfully",
@@ -44,7 +44,7 @@ export default function ProductsPage() {
   const handleFeatured = () => {
     setIsFeatured(isFeatured === true ? false : true);
     if (isFeatured) {
-      dispatch(OnlyFeatured())
+      dispatch(OnlyFeatured()).unwrap()
         .then(() => {
           toast({
             title: "fetched only featured products",
@@ -57,7 +57,7 @@ export default function ProductsPage() {
           });
         });
     } else {
-      dispatch(fetchProducts())
+      dispatch(fetchProducts()).unwrap()
         .then(() => {
           toast({
             title: "Fetched products successfully",
@@ -72,7 +72,7 @@ export default function ProductsPage() {
     }
   };
   useEffect(() => {
-    dispatch(PriceLessThanValue(maxPrice))
+    dispatch(PriceLessThanValue(maxPrice)).unwrap()
       .then(() => {
         toast({
           title: "fetched products with under maxprice",
@@ -86,7 +86,7 @@ export default function ProductsPage() {
       });
   }, [maxPrice]);
   useEffect(() => {
-    dispatch(RatingHigherThanValue(minRating))
+    dispatch(RatingHigherThanValue(minRating)).unwrap()
       .then(() => {
         toast({
           title: "fetched products with under maxprice",
@@ -100,12 +100,12 @@ export default function ProductsPage() {
       });
   }, [minRating]);
   const handleDelete = (productId: string) => {
-    dispatch(deleteProduct(productId))
+    dispatch(deleteProduct(productId)).unwrap()
       .then(() => {
         toast({
           title: "product deleted successfully",
         });
-        dispatch(fetchProducts())
+        dispatch(fetchProducts()).unwrap()
           .then(() => {
             toast({
               title: "Fetched products successfully",

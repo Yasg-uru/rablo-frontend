@@ -31,6 +31,7 @@ export const Login = createAsyncThunk(
       });
       return response.data;
     } catch (error: any) {
+      console.log("this is a error while user is login",error)
       return rejectWithValue(error.response.data.message);
     }
   }

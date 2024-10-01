@@ -40,7 +40,7 @@ export default function LoginPage() {
   });
 
   function onSubmit(data: z.infer<typeof LoginSchema>) {
-    dispatch(Login(data))
+    dispatch(Login(data)).unwrap()
       .then(() => {
         toast({
           title: "Logged in successfully",
