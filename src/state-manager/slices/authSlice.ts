@@ -13,7 +13,7 @@ export const Register = createAsyncThunk(
   "auth/register",
   async (formData: RegistrationFormSchema, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("user/register", formData, {
+      const response = await axiosInstance.post("/user/register", formData, {
         withCredentials: true,
       });
       return response.data;
@@ -26,7 +26,7 @@ export const Login = createAsyncThunk(
   "auth/login",
   async (formData: z.infer<typeof LoginSchema>, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("user/login", formData, {
+      const response = await axiosInstance.post("/user/login", formData, {
         withCredentials: true,
       });
       return response.data;

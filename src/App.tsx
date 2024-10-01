@@ -5,13 +5,15 @@ import './App.css'
 import { Routes ,Route} from 'react-router-dom'
 import RegistrationForm from './pages/auth/register'
 import LoginPage from './pages/auth/login'
+import ProductsPage from './pages/product/products'
 
 function App() {
-  const [count, setCount] = useState(0)
+ 
 
   return (
     <Routes>
-      <Route path='/' element={<RegistrationForm/>} />
+      <Route path='/' element={<ProductsPage/>} />
+      <Route path='/register' element={<RegistrationForm/>} />
       <Route path='/login' element={<LoginPage/>} />
     </Routes>
   )

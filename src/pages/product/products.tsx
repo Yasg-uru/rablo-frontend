@@ -3,17 +3,11 @@ import { useState, useEffect } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-
-interface Product {
-  _id: string;
-  productImage: string;
-  name: string;
-  price: number;
-  featured: boolean;
-  rating: number;
-  company: string;
-  createdAt: string;
-}
+import { Product } from "@/types/product-types/productSlice";
+import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
+import { fetchProducts } from "@/state-manager/slices/productSlice";
+import { useToast } from "@/hooks/use-toast";
+import Loader from "@/helper/Loader";
 
 const initialProducts: Product[] = [
   {
@@ -30,7 +24,10 @@ const initialProducts: Product[] = [
 ];
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const { isLoading, products } = useAppSelector((state) => state.product);
+  const dispatch = useAppDispatch();
+  const { toast } = useToast();
+
   const [filteredProducts, setFilteredProducts] =
     useState<Product[]>(initialProducts);
   const [maxPrice, setMaxPrice] = useState<number>(100);
@@ -38,15 +35,23 @@ export default function ProductsPage() {
   const [minRating, setMinRating] = useState<number>(0);
 
   useEffect(() => {
-    const filtered = products.filter(
-      (product) =>
-        product.price <= maxPrice &&
-        (isFeatured ? product.featured : true) &&
-        product.rating >= minRating
-    );
-    setFilteredProducts(filtered);
-  }, [products, maxPrice, isFeatured, minRating]);
-
+    dispatch(fetchProducts())
+      .then(() => {
+        toast({
+          title: "Fetched products successfully",
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: error,
+          variant: "destructive",
+        });
+      });
+  }, []);
+if(isLoading){
+    return <Loader/>
+}
+console.log("this is a products :",products)
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Products</h1>
@@ -87,7 +92,7 @@ export default function ProductsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProducts.map((product) => (
+         {   products.length>0 &&  products.map((product) => (
           <div key={product._id} className="border rounded-lg p-4 shadow-sm">
             <img
               src={product.productImage}
