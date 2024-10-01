@@ -25,7 +25,7 @@ import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
 import { Register } from "@/state-manager/slices/authSlice";
 import { useToast } from "@/hooks/use-toast";
 import Loader from "@/helper/Loader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const registrationSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
@@ -40,6 +40,7 @@ export type RegistrationFormSchema = z.infer<typeof registrationSchema>;
 export default function StylishRegistrationForm() {
   const dispatch = useAppDispatch();
   const { toast } = useToast();
+  const navigate=useNavigate();
   const { isLoading } = useAppSelector((state) => state.auth);
   const form = useForm<RegistrationFormSchema>({
     resolver: zodResolver(registrationSchema),
@@ -56,6 +57,7 @@ export default function StylishRegistrationForm() {
         toast({
           title: "Your account has been created successfully",
         });
+        navigate("/")
       })
       .catch((error) => {
         toast({
