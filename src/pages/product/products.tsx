@@ -5,7 +5,11 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Product } from "@/types/product-types/productSlice";
 import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
-import { fetchProducts } from "@/state-manager/slices/productSlice";
+import {
+  fetchProducts,
+  OnlyFeatured,
+  PriceLessThanValue,
+} from "@/state-manager/slices/productSlice";
 import { useToast } from "@/hooks/use-toast";
 import Loader from "@/helper/Loader";
 
@@ -48,10 +52,55 @@ export default function ProductsPage() {
         });
       });
   }, []);
-if(isLoading){
-    return <Loader/>
-}
-console.log("this is a products :",products)
+  const handleFeatured = () => {
+    setIsFeatured(isFeatured === true ? false : true);
+    if (isFeatured) {
+      dispatch(OnlyFeatured())
+        .then(() => {
+          toast({
+            title: "fetched only featured products",
+          });
+        })
+        .catch((error) => {
+          toast({
+            title: error,
+            variant: "destructive",
+          });
+        });
+    } else {
+      dispatch(fetchProducts())
+        .then(() => {
+          toast({
+            title: "Fetched products successfully",
+          });
+        })
+        .catch((error) => {
+          toast({
+            title: error,
+            variant: "destructive",
+          });
+        });
+    }
+  };
+  useEffect(() => {
+    dispatch(PriceLessThanValue(maxPrice))
+      .then(() => {
+        toast({
+          title: "fetched products with under maxprice",
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: error,
+          variant: "destructive",
+        });
+      });
+  }, [maxPrice]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+  console.log("this is a products :", products);
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Products</h1>
@@ -73,7 +122,7 @@ console.log("this is a products :",products)
           <Switch
             id="featured-filter"
             checked={isFeatured}
-            onCheckedChange={setIsFeatured}
+            onCheckedChange={handleFeatured}
           />
           <Label htmlFor="featured-filter">Featured Only</Label>
         </div>
@@ -92,25 +141,26 @@ console.log("this is a products :",products)
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-         {   products.length>0 &&  products.map((product) => (
-          <div key={product._id} className="border rounded-lg p-4 shadow-sm">
-            <img
-              src={product.productImage}
-              alt={product.name}
-              width={300}
-              height={300}
-              className="w-full h-48 object-cover mb-4 rounded"
-            />
-            <h2 className="text-lg font-semibold">{product.name}</h2>
-            <p className="text-gray-600">${product.price.toFixed(2)}</p>
-            <p className="text-sm text-gray-500">Rating: {product.rating}</p>
-            {product.featured && (
-              <span className="inline-block bg-yellow-200 text-yellow-800 text-xs px-2 py-1 rounded-full mt-2">
-                Featured
-              </span>
-            )}
-          </div>
-        ))}
+        {products.length > 0 &&
+          products.map((product) => (
+            <div key={product._id} className="border rounded-lg p-4 shadow-sm">
+              <img
+                src={product.productImage}
+                alt={product.name}
+                width={300}
+                height={300}
+                className="w-full h-48 object-cover mb-4 rounded"
+              />
+              <h2 className="text-lg font-semibold">{product.name}</h2>
+              <p className="text-gray-600">${product.price.toFixed(2)}</p>
+              <p className="text-sm text-gray-500">Rating: {product.rating}</p>
+              {product.featured && (
+                <span className="inline-block bg-yellow-200 text-yellow-800 text-xs px-2 py-1 rounded-full mt-2">
+                  Featured
+                </span>
+              )}
+            </div>
+          ))}
       </div>
     </div>
   );
