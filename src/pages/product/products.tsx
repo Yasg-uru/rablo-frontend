@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Product } from "@/types/product-types/productSlice";
 import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
 import {
+  deleteProduct,
   fetchProducts,
   OnlyFeatured,
   PriceLessThanValue,
@@ -13,28 +14,14 @@ import {
 } from "@/state-manager/slices/productSlice";
 import { useToast } from "@/hooks/use-toast";
 import Loader from "@/helper/Loader";
-
-const initialProducts: Product[] = [
-  {
-    _id: "66faf12f838b92a82de6dfa0",
-    productImage:
-      "https://res.cloudinary.com/duzmyzmpa/image/upload/v1727721773/onxhbgyggwc1leygeb0k.jpg",
-    name: "leather tshirt",
-    price: 78.4,
-    featured: true,
-    rating: 4.5,
-    company: "Trendsphere",
-    createdAt: "2024-09-30T18:42:55.080Z",
-  },
-];
+import { Trash } from "lucide-react";
 
 export default function ProductsPage() {
   const { isLoading, products } = useAppSelector((state) => state.product);
   const dispatch = useAppDispatch();
   const { toast } = useToast();
+  const { isLoggedIn } = useAppSelector((state) => state.auth);
 
-  const [filteredProducts, setFilteredProducts] =
-    useState<Product[]>(initialProducts);
   const [maxPrice, setMaxPrice] = useState<number>(100);
   const [isFeatured, setIsFeatured] = useState<boolean>(false);
   const [minRating, setMinRating] = useState<number>(0);
@@ -111,7 +98,32 @@ export default function ProductsPage() {
         });
       });
   }, [minRating]);
-
+  const handleDelete = (productId: string) => {
+    dispatch(deleteProduct(productId))
+      .then(() => {
+        toast({
+          title: "product deleted successfully",
+        });
+        dispatch(fetchProducts())
+        .then(() => {
+          toast({
+            title: "Fetched products successfully",
+          });
+        })
+        .catch((error) => {
+          toast({
+            title: error,
+            variant: "destructive",
+          });
+        });
+      })
+      .catch((err) => {
+        toast({
+          title: err,
+          variant: "destructive",
+        });
+      });
+  };
   if (isLoading) {
     return <Loader />;
   }
@@ -174,6 +186,12 @@ export default function ProductsPage() {
                   Featured
                 </span>
               )}
+              <div className="relative ">
+                <Trash
+                  onClick={() => handleDelete(product._id)}
+                  className="h-4 w-4 absolute right-0 text-red-500 font-bold text-xl cursor-pointer "
+                />
+              </div>
             </div>
           ))}
       </div>

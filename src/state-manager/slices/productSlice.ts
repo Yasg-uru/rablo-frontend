@@ -59,6 +59,22 @@ export const createProduct = createAsyncThunk(
     }
   }
 );
+export const deleteProduct = createAsyncThunk(
+  "/product/delete",
+  async (productId: string, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/product/delete/${productId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 export const OnlyFeatured = createAsyncThunk(
   "product/featured",
   async (_, { rejectWithValue }) => {
@@ -116,6 +132,15 @@ const productSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(RatingHigherThanValue.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deleteProduct.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(deleteProduct.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(deleteProduct.pending, (state) => {
       state.isLoading = true;
     });
     builder.addCase(createProduct.pending, (state) => {

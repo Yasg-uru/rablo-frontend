@@ -39,12 +39,12 @@ const formSchema = z.object({
         ),
       "Only .jpg, .jpeg, .png and .webp formats are supported."
     )
-    .optional(),
+    
 });
 
 export default function CreateProductPage() {
-    const dispatch=useAppDispatch();
-    const {isLoading}=useAppSelector(state=>state.product)
+  const dispatch = useAppDispatch();
+  const { isLoading } = useAppSelector((state) => state.product);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -67,17 +67,20 @@ export default function CreateProductPage() {
     formData.append("featured", values.featured.toString());
     formData.append("rating", values.rating.toString());
     formData.append("company", values.company);
-    formData.append("file",values.productImage)
-    dispatch(createProduct(formData)).then(()=>{toast({
-        title: "Product Created",
-        description: "Your product has been successfully created.",
-      })}).catch((error)=>{
+    formData.append("file", values.productImage);
+    dispatch(createProduct(formData))
+      .then(() => {
         toast({
-            title:error ,
-            variant:"destructive"
-        })
-    })
-    
+          title: "Product Created",
+          description: "Your product has been successfully created.",
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: error,
+          variant: "destructive",
+        });
+      });
   }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,8 +94,8 @@ export default function CreateProductPage() {
       reader.readAsDataURL(file);
     }
   };
-  if(isLoading){
-    return <Loader/>
+  if (isLoading) {
+    return <Loader />;
   }
 
   return (
