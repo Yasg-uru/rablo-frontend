@@ -33,6 +33,19 @@ export const PriceLessThanValue = createAsyncThunk(
     }
   }
 );
+export const RatingHigherThanValue = createAsyncThunk(
+  "product/rating",
+  async (value: number, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/product/rating/${value}`);
+      console.log("this is a response data of the products :", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.log("this is a error :", error);
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 export const OnlyFeatured = createAsyncThunk(
   "product/featured",
   async (_, { rejectWithValue }) => {
@@ -80,6 +93,16 @@ const productSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(PriceLessThanValue.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(RatingHigherThanValue.fulfilled, (state, action) => {
+      state.products = action.payload?.products;
+      state.isLoading = false;
+    });
+    builder.addCase(RatingHigherThanValue.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(RatingHigherThanValue.pending, (state) => {
       state.isLoading = true;
     });
   },

@@ -9,6 +9,7 @@ import {
   fetchProducts,
   OnlyFeatured,
   PriceLessThanValue,
+  RatingHigherThanValue,
 } from "@/state-manager/slices/productSlice";
 import { useToast } from "@/hooks/use-toast";
 import Loader from "@/helper/Loader";
@@ -96,6 +97,20 @@ export default function ProductsPage() {
         });
       });
   }, [maxPrice]);
+  useEffect(() => {
+    dispatch(RatingHigherThanValue(minRating))
+      .then(() => {
+        toast({
+          title: "fetched products with under maxprice",
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: error,
+          variant: "destructive",
+        });
+      });
+  }, [minRating]);
 
   if (isLoading) {
     return <Loader />;
