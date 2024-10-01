@@ -28,7 +28,7 @@ const productSchema = z.object({
   rating: z.number().min(0).max(5, "Rating must be between 0 and 5"),
   company: z.string().min(1, "Company name is required"),
 });
- export type productType=z.infer<typeof productSchema>
+export type productType = z.infer<typeof productSchema>;
 
 export default function CreateProductPage() {
   const dispatch = useAppDispatch();
@@ -48,7 +48,6 @@ export default function CreateProductPage() {
   });
 
   function onSubmit(values: z.infer<typeof productSchema>) {
-    
     dispatch(createProduct(values))
       .unwrap()
       .then(() => {
