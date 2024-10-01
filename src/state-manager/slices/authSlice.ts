@@ -62,16 +62,16 @@ const authSlice = createSlice({
       state.userinfo = action.payload.user;
       state.isLoading = false;
     });
-    builder.addCase(Register.pending, (state, action) => {
+    builder.addCase(Register.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(Register.rejected, (state, action) => {
+    builder.addCase(Register.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(Login.rejected, (state, action) => {
+    builder.addCase(Login.rejected, (state) => {
       state.isLoading = false;
     });
-    builder.addCase(Login.pending, (state, action) => {
+    builder.addCase(Login.pending, (state) => {
       state.isLoading = true;
     });
     builder.addCase(Login.fulfilled, (state, action) => {

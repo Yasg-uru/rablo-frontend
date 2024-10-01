@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { useAppDispatch } from "@/state-manager/hook";
@@ -62,7 +62,7 @@ export function UpdateProductDialog({ product }: UpdateProductDialogProps) {
         toast({ title: "Product updated successfully" });
         setOpen(false);
       })
-      .catch((error) => {
+      .catch(() => {
         toast({ title: "Failed to update product", variant: "destructive" });
       });
   }

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Product } from "@/types/product-types/productSlice";
+
 import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
 import {
   deleteProduct,
@@ -188,13 +188,15 @@ export default function ProductsPage() {
                   Featured
                 </span>
               )}
-              <div className="mt-4 flex justify-between items-center">
+              { isLoggedIn &&
+                <div className="mt-4 flex justify-between items-center">
                 <UpdateProductDialog product={product} />
                 <Trash
                   onClick={() => handleDelete(product._id)}
                   className="h-5 w-5 text-red-500 cursor-pointer"
                 />
               </div>
+              }
             </div>
           ))}
       </div>

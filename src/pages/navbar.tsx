@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,8 +8,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
-import { ShoppingCart, User, LogOut, Settings } from "lucide-react";
+
+import {  User, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
 import { Logout } from "@/state-manager/slices/authSlice";
@@ -19,7 +17,9 @@ import { toast } from "@/hooks/use-toast";
 import Loader from "@/helper/Loader";
 
 export default function Navbar() {
-  const { isLoggedIn,isLoading } = useAppSelector((state) => state.auth);
+  const { isLoggedIn, isLoading, userinfo } = useAppSelector(
+    (state) => state.auth
+  );
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -37,9 +37,9 @@ export default function Navbar() {
         });
       });
   };
-if(isLoading){
-    return <Loader/>
-}
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -71,14 +71,7 @@ if(isLoading){
           </div>
           <div className="flex items-center">
             <div className="hidden sm:ml-6 sm:flex sm:items-center">
-              <Input
-                type="search"
-                placeholder="Search products..."
-                className="w-64 mr-4"
-              />
-              <Button variant="ghost" size="icon" className="mr-4">
-                <ShoppingCart className="h-5 w-5" />
-              </Button>
+
               {isLoggedIn ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -88,7 +81,9 @@ if(isLoading){
                     >
                       <Avatar className="h-8 w-8">
                         <AvatarImage src="/avatar.png" alt="User avatar" />
-                        <AvatarFallback>JD</AvatarFallback>
+                        <AvatarFallback>
+                          {userinfo?.email.slice(0, 1)}
+                        </AvatarFallback>
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
@@ -96,10 +91,10 @@ if(isLoading){
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
-                          John Doe
+                          {userinfo?.name || ""}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
-                          john@example.com
+                          {userinfo?.email || ""}
                         </p>
                       </div>
                     </DropdownMenuLabel>
@@ -108,10 +103,7 @@ if(isLoading){
                       <User className="mr-2 h-4 w-4" />
                       <span>create product</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/settings")}>
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Settings</span>
-                    </DropdownMenuItem>
+
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
