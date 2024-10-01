@@ -15,6 +15,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import Loader from "@/helper/Loader";
 import { Trash } from "lucide-react";
+import { UpdateProductDialog } from "./update-product";
 
 export default function ProductsPage() {
   const { isLoading, products } = useAppSelector((state) => state.product);
@@ -105,17 +106,17 @@ export default function ProductsPage() {
           title: "product deleted successfully",
         });
         dispatch(fetchProducts())
-        .then(() => {
-          toast({
-            title: "Fetched products successfully",
+          .then(() => {
+            toast({
+              title: "Fetched products successfully",
+            });
+          })
+          .catch((error) => {
+            toast({
+              title: error,
+              variant: "destructive",
+            });
           });
-        })
-        .catch((error) => {
-          toast({
-            title: error,
-            variant: "destructive",
-          });
-        });
       })
       .catch((err) => {
         toast({
@@ -186,10 +187,11 @@ export default function ProductsPage() {
                   Featured
                 </span>
               )}
-              <div className="relative ">
+              <div className="mt-4 flex justify-between items-center">
+                <UpdateProductDialog product={product} />
                 <Trash
                   onClick={() => handleDelete(product._id)}
-                  className="h-4 w-4 absolute right-0 text-red-500 font-bold text-xl cursor-pointer "
+                  className="h-5 w-5 text-red-500 cursor-pointer"
                 />
               </div>
             </div>

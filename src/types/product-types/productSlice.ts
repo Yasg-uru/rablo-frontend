@@ -11,4 +11,5 @@ export interface Product {
   rating: number;
   company: string;
   createdAt: string;
+  productId:string;
 }

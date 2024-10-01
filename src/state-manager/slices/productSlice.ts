@@ -1,6 +1,8 @@
 import axiosInstance from "@/helper/axiosinstance";
+import { updateproductSchema } from "@/pages/product/update-product";
 import { productState } from "@/types/product-types/productSlice";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { z } from "zod";
 const initialState: productState = {
   isLoading: false,
   products: [],
@@ -88,6 +90,31 @@ export const OnlyFeatured = createAsyncThunk(
     }
   }
 );
+export const updateProduct = createAsyncThunk(
+  "product/update",
+  async (
+    formdata: {
+      productId: string;
+      data: z.infer<typeof updateproductSchema>;
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await axiosInstance.put(
+        `/product/update/${formdata.productId}`,
+        formdata.data,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("this is a response data of the products :", response.data);
+      return response.data;
+    } catch (error: any) {
+      console.log("this is a error :", error);
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 
 const productSlice = createSlice({
   name: "product",
@@ -150,6 +177,15 @@ const productSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(createProduct.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(updateProduct.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateProduct.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(updateProduct.fulfilled, (state) => {
       state.isLoading = false;
     });
   },
