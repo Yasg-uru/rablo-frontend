@@ -1,4 +1,3 @@
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -17,6 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
 import { Login } from "@/state-manager/slices/authSlice";
 import Loader from "@/helper/Loader";
+import { useNavigate } from "react-router-dom";
 
 export const LoginSchema = z.object({
   email: z.string().email({
@@ -30,6 +30,7 @@ export const LoginSchema = z.object({
 export default function LoginPage() {
   const { isLoading } = useAppSelector((state) => state.auth);
   const { toast } = useToast();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -40,11 +41,13 @@ export default function LoginPage() {
   });
 
   function onSubmit(data: z.infer<typeof LoginSchema>) {
-    dispatch(Login(data)).unwrap()
+    dispatch(Login(data))
+      .unwrap()
       .then(() => {
         toast({
           title: "Logged in successfully",
         });
+        navigate("/");
       })
       .catch((error) => {
         toast({

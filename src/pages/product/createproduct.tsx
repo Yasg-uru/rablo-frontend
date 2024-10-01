@@ -1,4 +1,3 @@
-
 // import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -33,7 +32,7 @@ const formSchema = z.object({
 export default function CreateProductPage() {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((state) => state.product);
-//   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  //   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

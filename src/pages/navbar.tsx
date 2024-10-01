@@ -8,21 +8,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {  User, LogOut } from "lucide-react";
+import { User, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/state-manager/hook";
 import { Logout } from "@/state-manager/slices/authSlice";
 import { toast } from "@/hooks/use-toast";
-import Loader from "@/helper/Loader";
+// import Loader from "@/helper/Loader";
 export default function Navbar() {
-  const { isLoggedIn, isLoading, userinfo } = useAppSelector(
+  const { isLoggedIn, userinfo } = useAppSelector(
     (state) => state.auth
   );
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const handleLogout = () => {
-    dispatch(Logout()).unwrap()
+    dispatch(Logout())
+      .unwrap()
       .then(() => {
         toast({
           title: "Logged out successfull",
@@ -35,9 +36,9 @@ export default function Navbar() {
         });
       });
   };
-  if (isLoading) {
-    return <Loader />;
-  }
+  //   if (isLoading) {
+  //     return <Loader />;
+  //   }
   return (
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -69,7 +70,6 @@ export default function Navbar() {
           </div>
           <div className="flex items-center">
             <div className="hidden sm:ml-6 sm:flex sm:items-center">
-
               {isLoggedIn ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
